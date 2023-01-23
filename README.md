@@ -2,52 +2,53 @@
 
 ### ROSMAP WGS data source: https://www.synapse.org/#!Synapse:syn11724057
 
-### programmatic access to ROSMAP WGS data
+File type	Description
+annotated.clinical.txt	All low frequency HIGH/MODERATE annotated variants with possible clinical impact (from ClinVar ) in text file format
+annotated.coding_rare.txt	All HIGH/MODERATE annotated variants with less than 5% allele frequency in 1000genomes and ExAC in text file format
+annotated.coding.txt	All annotated variants with HIGH/MODERATE impact in text file format
+annotated.txt	All variants with annotations in text file format
+annotated.vcf.gz	All variants with annotations in variant call format (VCF)
+annotated.vcf.gz.tbi	Index file for annotated VCF file
+recalibrated_variants.vcf.gz	All variants in variant call format
+recalibrated_variants.vcf.gz.tbi	Index file for VCF file with all variants
 
-To download the files of interest:
-```python
-import synapseclient 
-import synapseutils 
- 
-# specify the following 
-path = '/home/gridsan/djuna/github/ROSMAPwgs/raw_data/syn11724057'
-username = 
-pw = 
-targets = set(['1', '2'])
-search_files = 'annotated.vcf'
 
-syn = synapseclient.Synapse() 
-syn.login(usernam, pw) 
+### First, Create conda env
+```bash
+conda create --name wgs_env
+conda install -c bioconda tabix
+conda install -c anaconda ipykernel
+python -m ipykernel install --user --name=wgs_env
+pip install scikit-allel
+```
 
-walkedPath = synapseutils.walk(syn, "syn11724057")
+### Then, install the following to map genes to chromosomes
+```bash
+mkdir human_Release_19_GRCh37p13
+cd human_Release_19_GRCh37p13
+wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gff3.gz
+```
 
-filenames = []
-for dirpath, dirname, filename in walkedPath:
-    filenames.append(filename)
-    
-annotated = []    
-for f in filenames[0]:
-    curr = f[0]
-    if search_files in curr:
-        annotated.append(f)
-        
-
-index = [x[0].split('.')[0].split('_')[-1] in targets for x in annotated]
-sele = np.array(annotated)[index][:,-1]
-
-with open(path + '/manifest.txt', 'w') as f:
-    for i in sele:
-        files = synapseutils.syncFromSynapse(syn, i, path = path) 
-        f.write(str(files[0]))
+### To download your data of interest, run the following
+```bash
+python main.py --gene_list "['ABCA7']" --outdir './test_output' --username <USERNAME> --pw <PASSWORD> --extension 'annotated.coding.txt' # downloading the variant annotations of interest
+python main.py --gene_list "['ABCA7']" --outdir './test_output' --username <USERNAME> --pw <PASSWORD> --extension 'annotated.vcf.gz' # downloading the variant call files
 
 ```
 
-before run the above need to extract 
+### You can use the following functions to further process the data
+
+the goal is to have a table of variants for each of the ROSMAP individuals for each variant of interest + an information / annotation table for each variant
+and some QC filtering?
 
 
 
-### pipeline:
 
-1. From a list of genes, get chromosome numbers or take user-input chromosome numbers
-2. specify which type of files want to download for each chromosome; annotated ones or not..
-3. download these; QC; annotate; process to get the variants of interest
+
+
+
+
+
+
+
+
