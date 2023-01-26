@@ -16,7 +16,7 @@ recalibrated_variants.vcf.gz.tbi	Index file for VCF file with all variants
 ### First, Create conda env
 ```bash
 conda create --name wgs_env
-conda install -c bioconda tabix
+conda install -c bioconda tabix 
 conda install -c anaconda ipykernel
 python -m ipykernel install --user --name=wgs_env
 pip install scikit-allel
