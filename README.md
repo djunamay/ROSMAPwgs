@@ -30,7 +30,7 @@ python main.py --outdir './raw_data' --username <USERNAME> --pw <PASSWORD> --gen
 
 | File type  | Description |
 | ------------- | ------------- |
-| annotated.clinical.txt  | All low frequency HIGH/MODERATE annotated variants with possible clinical impact (from ClinVar ) in text file format  |
+| annotated.clinical.txt  | All low frequency HIGH/MODERATE annotated variants with possible clinical impact (from ClinVar) in text file format  |
 | annotated.coding_rare.txt  | All HIGH/MODERATE annotated variants with less than 5% allele frequency in 1000genomes and ExAC in text file format  |
 | annotated.coding.txt  | All annotated variants with HIGH/MODERATE impact in text file format  |
 | annotated.txt  | All variants with annotations in text file format  |
