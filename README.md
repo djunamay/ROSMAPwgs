@@ -1,5 +1,5 @@
 ## ROSMAPwgs:
-This repository contains code to download [whole genome sequencing data from the ROSMAP longitudinal cohort study](https://www.synapse.org/#!Synapse:syn11724057) and extract coding variant annotation information for genes of interest.
+This repository contains code to download [whole genome sequencing data from the ROSMAP longitudinal cohort study](https://www.synapse.org/#!Synapse:syn11724057) and extract coding variant annotation information for genes of interest. For more information see [here](https://www.synapse.org/#!Synapse:syn10901595).
 
 ## Getting started: 
 
