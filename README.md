@@ -1,8 +1,6 @@
 ## ROSMAPwgs:
 This repository contains code to download [whole genome sequencing data from the ROSMAP longitudinal cohort study](https://www.synapse.org/#!Synapse:syn11724057) and extract coding variant annotation information for genes of interest.
 
-*For now, this pipeline only extracts variant info for coding regions of interest (by gene) - it just takes a few modifications to generalize this to all genomic regions of interest. We'll add that soon!*
-
 ## Getting started: 
 
 1. Set up environment
@@ -21,14 +19,14 @@ cd human_Release_19_GRCh37p13
 wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gff3.gz
 python ./ROSMAPwgs/get_dictionaries.py
 ```
-N.B. *Be sure to download __GRCh37__ as "Paired-end 150bp reads were aligned to the GRCh37 human reference" -- see the documentation on [synapse](https://www.synapse.org/#!Synapse:syn10901595)*
+*N.B. Be sure to download __GRCh37__ as "Paired-end 150bp reads were aligned to the GRCh37 human reference" -- see the documentation on [synapse](https://www.synapse.org/#!Synapse:syn10901595)*
 
 
 3. Download vcf files for your genes of interest
 ```bash
 python main.py --outdir './raw_data' --username <USERNAME> --pw <PASSWORD> --gene_list "['APOE', 'ABCA1']" --extension 'recalibrated_variants.vcf.gz' --extract_HIGHandMED_annotations False --download True
 ```
-N.B. *These files are available to download from synapse:*
+*N.B. These files are available to download from synapse:*
 
 | File type  | Description |
 | ------------- | ------------- |
@@ -46,6 +44,8 @@ N.B. *These files are available to download from synapse:*
 ```bash
 python main.py --outdir './raw_data' --gene_list "['APOE', 'ABCA1']" --extract_HIGHandMED_annotations True --download False
 ```
+
+*For now, this pipeline only extracts variant info for coding regions of interest (by gene) - it just takes a few modifications to generalize this to all genomic regions of interest. We'll add that soon!*
 
 *N.B.*
 - _If `--download` is `True`, `--outdir` must contain the following files for each chromosome of interest: recalibrated_variants.vcf.gz, recalibrated_variants.vcf.gz.tbi, recalibrated_variants.annotated.coding.txt. These files can be downloaded to the `--outdir` by specifying --`skip_download` as `False` and `--extension` as recalibrated_variants.vcf.gz_
