@@ -46,10 +46,10 @@ python main.py --outdir './raw_data' --gene_list "['APOE', 'ABCA1']" --extract_H
 ```
 
 *N.B.*
-- _For now, this pipeline only extracts variant info for coding regions of interest (by gene) - it just takes a few modifications to generalize this to all genomic regions of interest. We'll add that soon!_
-- _If `--download` is `True`, `--outdir` must contain the following files for each chromosome of interest: recalibrated_variants.vcf.gz, recalibrated_variants.vcf.gz.tbi, recalibrated_variants.annotated.coding.txt. These files can be downloaded to the `--outdir` by specifying --`skip_download` as `False` and `--extension` as recalibrated_variants.vcf.gz_
-- _Make sure the genes you specify in `--gene_list` are located on the chromosomes for which you have files in the `--outdir`_
-- _This pipeline intentionally allows separation of the download and annotation extraction components. This is useful if you are running this code on a server and only only have internet access on the login node. In this case, run the first command on the login node and the second command on a compute node. Otherwise, just execute together with `--download True` and `--extract_HIGHandMED_annotations True`_
+- For now, this pipeline only extracts variant info for coding regions of interest (by gene) - it just takes a few modifications to generalize this to all genomic regions of interest. We'll add that soon!
+- If `--download` is `True`, `--outdir` must contain the following files for each chromosome of interest: recalibrated_variants.vcf.gz, recalibrated_variants.vcf.gz.tbi, recalibrated_variants.annotated.coding.txt. These files can be downloaded to the `--outdir` by specifying --`skip_download` as `False` and `--extension` as recalibrated_variants.vcf.gz
+- Make sure the genes you specify in `--gene_list` are located on the chromosomes for which you have files in the `--outdir`
+- This pipeline intentionally allows separation of the download and annotation extraction components. This is useful if you are running this code on a server and only only have internet access on the login node. In this case, run the first command on the login node and the second command on a compute node. Otherwise, just execute together with `--download True` and `--extract_HIGHandMED_annotations True`
 
 
 
