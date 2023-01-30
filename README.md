@@ -2,6 +2,8 @@
 
 ### Pipeline to download [whole genome sequencing data from the ROSMAP longitudinal cohort study](https://www.synapse.org/#!Synapse:syn11724057) and extract coding variant annotation information for genes of interest.
 
+## Getting started: 
+
 1. Set up environment
 ```bash
 conda create --name wgs_env
