@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import uuid
 import allel
+import os as os
 
 def format_annotations(callset, name):
     short_name = name.split('/')[1]
