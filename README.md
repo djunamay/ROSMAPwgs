@@ -1,8 +1,8 @@
-# WGS_processing
+# ROSMAPwgs
 
-### ROSMAP WGS data source: https://www.synapse.org/#!Synapse:syn11724057
+Pipeline to download [whole genome sequencing data from the ROSMAP longitudinal cohort study](https://www.synapse.org/#!Synapse:syn11724057) and extract coding variant annotation information for genes of interest.
 
-### First, Create conda env
+1. Set up environment
 ```bash
 conda create --name wgs_env
 conda install -c bioconda tabix 
@@ -11,16 +11,16 @@ python -m ipykernel install --user --name=wgs_env
 pip install scikit-allel
 ```
 
-### Then, install the following to map genes to chromosomes
+2. Download ensembl release GRCh37 annotations & generate dictionaries
 ```bash
-mkdir human_Release_19_GRCh37p13
+mkdir ./human_Release_19_GRCh37p13
 cd human_Release_19_GRCh37p13
 wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gff3.gz
+python ./ROSMAPwgs/get_dictionaries.py
 ```
 
 ### Download the dictionaries
 ```bash
-python ./ROSMAPwgs/get_dictionaries.py
 ```
 
 ### To download your data of interest, run the following
