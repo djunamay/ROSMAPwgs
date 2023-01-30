@@ -2,17 +2,6 @@
 
 ### ROSMAP WGS data source: https://www.synapse.org/#!Synapse:syn11724057
 
-File type	Description
-annotated.clinical.txt	All low frequency HIGH/MODERATE annotated variants with possible clinical impact (from ClinVar ) in text file format
-annotated.coding_rare.txt	All HIGH/MODERATE annotated variants with less than 5% allele frequency in 1000genomes and ExAC in text file format
-annotated.coding.txt	All annotated variants with HIGH/MODERATE impact in text file format
-annotated.txt	All variants with annotations in text file format
-annotated.vcf.gz	All variants with annotations in variant call format (VCF)
-annotated.vcf.gz.tbi	Index file for annotated VCF file
-recalibrated_variants.vcf.gz	All variants in variant call format
-recalibrated_variants.vcf.gz.tbi	Index file for VCF file with all variants
-
-
 ### First, Create conda env
 ```bash
 conda create --name wgs_env
@@ -29,17 +18,37 @@ cd human_Release_19_GRCh37p13
 wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gff3.gz
 ```
 
-### To download your data of interest, run the following
+### Download the dictionaries
 ```bash
-python main.py --gene_list "['ABCA7']" --outdir './test_output' --username <USERNAME> --pw <PASSWORD> --extension 'annotated.coding.txt' # downloading the variant annotations of interest
-python main.py --gene_list "['ABCA7']" --outdir './test_output' --username <USERNAME> --pw <PASSWORD> --extension 'annotated.vcf.gz' # downloading the variant call files
-
+python ./ROSMAPwgs/get_dictionaries.py
 ```
 
-### You can use the following functions to further process the data
+### To download your data of interest, run the following
+```bash
+python main.py --outdir './raw_data' --username <USERNAME> --pw <PASSWORD> --gene_list "['APOE', 'ABCA1']" --extension 'recalibrated_variants.vcf.gz' --extract_HIGHandMED_annotations False --download True
+```
 
-the goal is to have a table of variants for each of the ROSMAP individuals for each variant of interest + an information / annotation table for each variant
-and some QC filtering?
+available data to download from Synapse:
+File type	Description
+annotated.clinical.txt	All low frequency HIGH/MODERATE annotated variants with possible clinical impact (from ClinVar ) in text file format
+annotated.coding_rare.txt	All HIGH/MODERATE annotated variants with less than 5% allele frequency in 1000genomes and ExAC in text file format
+annotated.coding.txt	All annotated variants with HIGH/MODERATE impact in text file format
+annotated.txt	All variants with annotations in text file format
+annotated.vcf.gz	All variants with annotations in variant call format (VCF)
+annotated.vcf.gz.tbi	Index file for annotated VCF file
+recalibrated_variants.vcf.gz	All variants in variant call format
+recalibrated_variants.vcf.gz.tbi	Index file for VCF file with all variants
+
+
+### To get the variant annotation info separately 
+```bash
+python main.py --outdir './raw_data' --gene_list "['APOE', 'ABCA1']" --extract_HIGHandMED_annotations True --download False
+```
+
+Notes:
+- If --download is True, --outdir must contain the following files for each chromosome of interest: recalibrated_variants.vcf.gz, recalibrated_variants.vcf.gz.tbi, recalibrated_variants.annotated.coding.txt. These files can be downloaded to the --outdir by specifying --skip_download as False and --extension as 'recalibrated_variants.vcf.gz'
+- Make sure the genes you specify in --gene_list are located on the chromosomes for which you have files in the --outdir
+- This pipeline intentionally allows separation of the download and annotation extraction components. This is useful if you are running this code on a server and only only have internet access on the login node. In this case, run the first command on the login node and the second command on a compute node. Otherwise, just execute together with --skip_download False and --extract_HIGHandMED_annotations True
 
 
 
