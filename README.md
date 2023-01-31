@@ -7,8 +7,6 @@ This repository contains code to download [whole genome sequencing data from the
 ```bash
 conda create --name wgs_env
 conda install -c bioconda tabix 
-conda install -c anaconda ipykernel
-python -m ipykernel install --user --name=wgs_env
 pip install scikit-allel
 ```
 
