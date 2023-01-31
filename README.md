@@ -51,6 +51,15 @@ python main.py --outdir './raw_data' --gene_list "['APOE', 'ABCA1']" --extract_H
 - Make sure the genes you specify in `--gene_list` are located on the chromosomes for which you have files in the `--outdir`
 - This pipeline intentionally allows separation of the download and annotation extraction components. This is useful if you are running this code on a server and only only have internet access on the login node. In this case, run the first command on the login node and the second command on a compute node. Otherwise, just execute together with `--download True` and `--extract_HIGHandMED_annotations True`
 
+5. To run tests:
+```bash
+pip install assertpy
+pip install pytest
+python -m pytest test.py
+```
+*N.B. If you have the specified paths path1-4 (see test.py) in the `./test_output` directory, additional tests will be performed and the testing will be slower. Remove these files or rename the parent folder if you don't want the additional tests to be run.*
+
+
 
 
 

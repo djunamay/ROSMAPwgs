@@ -1,5 +1,5 @@
 """
-The main file, which performs qc and annotation of single-cell count matrices.
+The main file, which downloads WGS data from synapse and returns variant annotation and genotype data for specified genes
 """
 
 import numpy as np
@@ -18,8 +18,10 @@ from ROSMAPwgs.download import get_chromosome_annotations, extract_filenames, fi
 from ROSMAPwgs.annotate import return_all_variants_table, extract_callset_data, return_variant_indices_from_vcf, format_genotype_data, return_genotype_counts, compute_MAFs, save_paths_per_chromosome, make_executable
 
 def main(args):
-    '''Given arguments from `args` performs qc and annotation.
     '''
+    Given arguments from `args` performs qc and annotation.
+    '''
+    
     print('loading dictionary')
     dictionary = np.load('./human_Release_19_GRCh37p13/chr_dictionary.npy', allow_pickle=True).item()
     if args.download is True:
@@ -45,6 +47,7 @@ def main(args):
     if args.extract_HIGHandMED_annotations is True:
         print('extracting medium and high annotation info')
         postion_dict = np.load('./human_Release_19_GRCh37p13/pos_dictionary.npy', allow_pickle=True).item()
+        
         callset_names = eval(args.callset_names)
         annotation_names = eval(args.annotation_names)
         gene_list = eval(args.gene_list)
@@ -74,12 +77,7 @@ def main(args):
         else:
             result = pd.concat(outputs, ignore_index=True, sort=False)
         result.to_csv(args.outdir + '/HIGHandMED_coding_annotations_' + args.synapseID + '_subset.csv')
-        print('done.')
-        
-# get main script working
-# write tests for each function
-# understand all the QC metrics
-        
+        print('done.')       
         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='perform qc and annotation of single-cell count matrix.')

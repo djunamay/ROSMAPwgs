@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+
 gencode = pd.read_table('./human_Release_19_GRCh37p13/gencode.v19.annotation.gff3.gz', comment="#", sep = "\t", names = ['seqname', 'source', 'feature', 'start' , 'end', 'score', 'strand', 'frame', 'attribute'])
 gencode_genes = gencode[(gencode.feature == "gene")][['seqname', 'start', 'end', 'attribute']].copy().reset_index().drop('index', axis=1)
 gencode_genes['names'] = gencode_genes['attribute'].str.split(';',expand=True).loc[:,5].str.split('=', expand=True).loc[:,1]

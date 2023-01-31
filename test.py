@@ -1,5 +1,4 @@
 import numpy as np
-import argparse
 import os
 import pandas as pd
 import allel
@@ -19,7 +18,7 @@ path3 = './test_output/DEJ_11898_B01_GRM_WGS_2017-05-15_19.recalibrated_variants
 path4 = './test_output/DEJ_11898_B01_GRM_WGS_2017-05-15_19.recalibrated_variants.annotated.coding.txt'
 callset_names = ['variants/CHROM', 'variants/POS', 'variants/REF', 'variants/ALT', 'variants/FILTER_PASS', 'variants/numalt', 'variants/AF']
 annotation_names = ['POS', 'ID', 'REF', 'ALT', 'EFFECT', 'IMPACT', 'GENE', 'GENEID', 'HGVS_C', 'HGVC_P', 'LOF', 'NMD', '1000Gp3_AF']
-gene = 'APOE'
+gene = 'ABCA7'
 
 if os.path.isfile(path1) & os.path.isfile(path2) & os.path.isfile(path3) & os.path.isfile(path4):
     print('loading test data')
