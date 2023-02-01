@@ -144,17 +144,17 @@ def return_all_variants_table(path_to_vcf, path_to_annotations, path_to_tbi, pos
         callset_names list
             list of key names to extract from vcf callset, must include 'variants/POS' and 'variants/'FILTER_PASS' with boolean indicating whether to keep (True) variants based on QC criteria
     '''
+    annotation = pd.read_table(path_to_annotations, dtype=object)[annotation_names]
     
+    if gene not in set(annotation['GENE']):
+        raise Exception("Gene is not in annotation file. Try a different gene or select an annotation file that contains annotations for this gene.")
+     
     if callset is None:
         print('loading vcf')
         callset = allel.read_vcf(path_to_vcf, fields = '*', region=postion_dict[gene], tabix=path_to_tbi) 
         
     print('vcf loaded.')
-    annotation = pd.read_table(path_to_annotations, dtype=object)[annotation_names]
-    
-    if gene not in set(annotation['GENE']):
-        raise Exception("Gene is not in annotation file. Try a different gene or select an annotation file that contains annotations for this gene.")
-        
+   
     print('extracting variant info')
     df = extract_callset_data(callset_names, callset)
     convert_to_int(df)
