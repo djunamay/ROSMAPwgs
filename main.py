@@ -70,10 +70,17 @@ def main(args):
             
             for gene in current_genes:
                 print('---gene ' + str(gene))
-                outputs.append(return_all_variants_table(path_to_vcf, path_to_annotations, path_to_tbi, postion_dict, gene, annotation_names, callset_names))
+                try:
+                    outputs.append(return_all_variants_table(path_to_vcf, path_to_annotations, path_to_tbi, postion_dict, gene, annotation_names, callset_names))
+                except:
+                    pass
             
-        if len(outputs)==1:
-            result = outputs[0]
+        if len(outputs)<=1:
+            try:
+                result = outputs[0]
+            except:
+                print('done, but no variant annotations found for input genes.')
+                pass
         else:
             result = pd.concat(outputs, ignore_index=True, sort=False)
         result.to_csv(args.outdir + '/HIGHandMED_coding_annotations_' + args.synapseID + '_subset.csv')
