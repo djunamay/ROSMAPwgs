@@ -150,6 +150,9 @@ def return_all_variants_table(path_to_vcf, path_to_annotations, path_to_tbi, pos
     print('vcf loaded.')
     annotation = pd.read_table(path_to_annotations, dtype=object)[annotation_names]
     
+    if gene not in set(annotation['GENE']):
+        raise Exception("Gene is not in annotation file. Try a different gene or select an annotation file that contains annotations for this gene.")
+        
     print('extracting variant info')
     df = extract_callset_data(callset_names, callset)
     convert_to_int(df)
@@ -206,25 +209,23 @@ def load_test_data(path1, path2, path3, path4, callset_names, annotation_names, 
     Test function
     '''
     # loading the data
+    annotation = pd.read_table(path4, dtype=object)[annotation_names]
+    if gene not in set(annotation['GENE']):
+        raise Exception("Gene is not in annotation file.")
     postion_dict = np.load(path1, allow_pickle=True).item()    
     callset = allel.read_vcf(path2, fields = '*', region=postion_dict[gene], tabix=path3) 
-    annotation = pd.read_table(path4, dtype=object)[annotation_names]
-    
     # extracting callset data and merging with annotation
     df = extract_callset_data(callset_names, callset)
     convert_to_int(df)
     convert_to_int(annotation)
     all_data = pd.merge(df, annotation, on = 'POS')
     all_data = all_data.loc[all_data['FILTER_PASS']]
-    
     # extracting genotype data for variants of interest
     callset_position_indices = return_variant_indices_from_vcf(pos = callset['variants/POS'])
     genotype_data = format_genotype_data(callset, callset_position_indices, all_data)
-    
     # computing genotype metrics
     genotype_counts = return_genotype_counts(genotype_data)
     MAFs = compute_MAFs(genotype_counts)
-    
     # combining all datasets
     all_variants = pd.concat((all_data, genotype_counts, MAFs, genotype_data), axis = 1)
     return postion_dict, callset, annotation, df, all_data, callset_position_indices, genotype_data, genotype_counts, MAFs, all_variants
