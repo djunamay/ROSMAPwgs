@@ -69,5 +69,5 @@ python -m pytest test.py
 
 
 
-
+##### have to add exception if the gene has no coding variants represented in the ROSMAP cohort
 
