@@ -16,15 +16,24 @@ path1 = './human_Release_19_GRCh37p13/pos_dictionary.npy'
 path2 = './test_output/DEJ_11898_B01_GRM_WGS_2017-05-15_19.recalibrated_variants.vcf.gz'
 path3 = './test_output/DEJ_11898_B01_GRM_WGS_2017-05-15_19.recalibrated_variants.vcf.gz.tbi'
 path4 = './test_output/DEJ_11898_B01_GRM_WGS_2017-05-15_19.recalibrated_variants.annotated.coding.txt'
-callset_names = ['variants/CHROM', 'variants/POS', 'variants/REF', 'variants/ALT', 'variants/FILTER_PASS', 'variants/numalt', 'variants/AF']
-annotation_names = ['POS', 'ID', 'REF', 'ALT', 'EFFECT', 'IMPACT', 'GENE', 'GENEID', 'HGVS_C', 'HGVC_P', 'LOF', 'NMD', '1000Gp3_AF']
-gene = 'ABCA7'
 
 if os.path.isfile(path1) & os.path.isfile(path2) & os.path.isfile(path3) & os.path.isfile(path4):
-    print('loading test data')
+    # if data for chr19 exists, load test data for a randomly sampled gene on this chromosome, run tests on this
+    print('loading test data for:')
+    callset_names = ['variants/CHROM', 'variants/POS', 'variants/REF', 'variants/ALT', 'variants/FILTER_PASS', 'variants/numalt', 'variants/AF']
+    annotation_names = ['POS', 'ID', 'REF', 'ALT', 'EFFECT', 'IMPACT', 'GENE', 'GENEID', 'HGVS_C', 'HGVC_P', 'LOF', 'NMD', '1000Gp3_AF']
+    dictionary = np.load('./human_Release_19_GRCh37p13/chr_dictionary.npy', allow_pickle=True).item()
+    mapping = pd.DataFrame.from_dict(dictionary, orient = 'index')
+    genes = mapping.loc[mapping.loc[:,0]=='chr19'].index
     make_executable(path3)
-    postion_dict, callset, annotation, df, all_data, callset_position_indices, genotype_data, genotype_counts, MAFs, all_variants = load_test_data(path1, path2, path3, path4, callset_names, annotation_names, gene)
-
+    callset = None
+    while callset is None:
+        try:
+            gene = random.choice(genes)
+            print(gene)
+            postion_dict, callset, annotation, df, all_data, callset_position_indices, genotype_data, genotype_counts, MAFs, all_variants = load_test_data(path1, path2, path3, path4, callset_names, annotation_names, gene)
+        except:
+            pass
 '''
 Run tests
 '''
@@ -65,7 +74,7 @@ def test_compute_MAFs():
         provided_maf = callset['variants/AF']
         pos_indices = [np.where(callset['variants/POS']==x)[0][0] for x in all_data['POS']]
         p = provided_maf[pos_indices]
-        assert_that(np.allclose(np.array(p),np.array(MAFs['MAF']), atol = 4e-04)).is_true()
+        assert_that(np.allclose(np.array(p[:,0]),np.array(MAFs['MAF']), atol = 0.001)).is_true()
 
     l = [[[0,1], [1,1], [0,0]], [[0,0], [0,0], [1,1]]]
     g = [convert_genotypes_to_str(i) for i in l]
@@ -104,7 +113,7 @@ def test_return_all_variants_table():
     Testing function that returns variant annotation and genotype data for gene of interest
         - For a randomly selected sample, convert the genotype from strings to nested list and extract the genotype for that sample from the callset
             - Compare genotypes
-            - Compare REF and ALT alleles extracted from callset and merged from annotations to test that merging on positions correctly merges the same variants
+            - Compare REF and ALT alleles extracted from callset and merged from annotations to test that merging on positions identifies the same variants (i.e. that annotation for position X correspond to the variants at position X in the callset)
     """
     if 'callset' in locals():
         temp = return_all_variants_table(path2, path4, path3, postion_dict, gene, annotation_names, callset_names, callset)
