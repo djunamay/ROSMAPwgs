@@ -51,6 +51,8 @@ python main.py --outdir './raw_data' --gene_list "['APOE', 'ABCA1']" --extract_H
 
 5. To run tests:
 ```bash
+python main.py --outdir './test_output' --username <USERNAME> --pw <PASSWORD> --gene_list "['APOE']" --extension 'recalibrated_variants.vcf.gz' --extract_HIGHandMED_annotations False --download True
+
 pip install assertpy
 pip install pytest
 python -m pytest test.py
