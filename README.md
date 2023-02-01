@@ -12,6 +12,7 @@ pip install scikit-allel
 
 2. Download ensembl release GRCh37 annotations & generate dictionaries
 ```bash
+git clone git@github.com:djunamay/ROSMAPwgs.git
 mkdir ./human_Release_19_GRCh37p13
 cd human_Release_19_GRCh37p13
 wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19/gencode.v19.annotation.gff3.gz
@@ -40,6 +41,7 @@ python main.py --outdir './raw_data' --username <USERNAME> --pw <PASSWORD> --gen
 	
 4. Extract High/Moderate variant annotations for genes of interest
 ```bash
+python main.py --outdir './raw_data' --username <USERNAME> --pw <PASSWORD> --gene_list "['APOE', 'ABCA1']" --extension 'annotated.coding.txt' --extract_HIGHandMED_annotations False --download True
 python main.py --outdir './raw_data' --gene_list "['APOE', 'ABCA1']" --extract_HIGHandMED_annotations True --download False
 ```
 
