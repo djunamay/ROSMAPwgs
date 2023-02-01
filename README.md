@@ -41,6 +41,7 @@ python main.py --outdir './raw_data' --username <USERNAME> --pw <PASSWORD> --gen
 	
 4. Extract High/Moderate variant annotations for genes of interest
 ```bash
+python main.py --outdir './raw_data' --username <USERNAME> --pw <PASSWORD> --gene_list "['APOE', 'ABCA1']" --extension 'annotated.coding.txt' --extract_HIGHandMED_annotations False --download True
 python main.py --outdir './raw_data' --gene_list "['APOE', 'ABCA1']" --extract_HIGHandMED_annotations True --download False
 ```
 
