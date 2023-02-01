@@ -12,5 +12,5 @@ sele = np.array(gencode_genes[['chr', 'start','end']])
 gencode_genes['location'] = [str(x[0]) + ':' + str(x[1]) + '-' + str(x[2]) for x in sele]
 position_dictionary = dict(zip(gencode_genes['names'], gencode_genes['location']))
 
-np.save('../human_Release_19_GRCh37p13/chr_dictionary.npy', chromosome_dictionary) 
-np.save('../human_Release_19_GRCh37p13/pos_dictionary.npy', position_dictionary) 
+np.save('./human_Release_19_GRCh37p13/chr_dictionary.npy', chromosome_dictionary) 
+np.save('./human_Release_19_GRCh37p13/pos_dictionary.npy', position_dictionary) 
