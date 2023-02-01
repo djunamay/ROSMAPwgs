@@ -79,7 +79,9 @@ def compute_MAFs(genotype_counts):
         genotype_data pandas dataframe
             output from format_genotype_data()
     '''
-    MAF = pd.DataFrame((genotype_counts['N 0/1']*1 + genotype_counts['N 1/1']*2)/(genotype_counts['N 0/0']*2 + genotype_counts['N 0/1']*2 + genotype_counts['N 1/1']*2))
+    denominator = np.sum(genotype_counts*2, axis = 1)
+    N_Alt_alleles_per_col = [np.sum(np.array(x.split(' ')[-1].split('/'))=='1') for x in genotype_counts.columns]
+    MAF = pd.DataFrame(np.sum(genotype_counts * N_Alt_alleles_per_col, axis = 1)/denominator)
     MAF.columns = ['MAF']
     return MAF
 
