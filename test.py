@@ -22,6 +22,7 @@ gene = 'ABCA7'
 
 if os.path.isfile(path1) & os.path.isfile(path2) & os.path.isfile(path3) & os.path.isfile(path4):
     print('loading test data')
+    make_executable(path3)
     postion_dict, callset, annotation, df, all_data, callset_position_indices, genotype_data, genotype_counts, MAFs, all_variants = load_test_data(path1, path2, path3, path4, callset_names, annotation_names, gene)
 
 '''
@@ -31,6 +32,7 @@ Run tests
 def test_convert_genotypes_to_str():
     """
     Testing function that converts ndarray genotype to string
+        - Comparing manually-determined solution to function output for a simple example
     """
     l = [[0,1], [1,1]]
     g = convert_genotypes_to_str(l)
@@ -41,6 +43,7 @@ def test_convert_genotypes_to_str():
 def test_return_genotype_counts():
     """
     Testing function that returns genotype counts
+        - Comparing manually-determined solution to function output for a simple example
     """
     
     l = [[[0,1], [1,1], [0,0]], [[0,0], [0,0], [1,1]]]
@@ -54,10 +57,14 @@ def test_return_genotype_counts():
 def test_compute_MAFs():
     """
     Testing function that computes minor allele frequencies from input genotype data
+        - Comparing allele frequencies provided in the callset to function outputs
+            - If they are close (up to rounding), this suggests that (1) MAFs are being computed correctly by our function and (2) that genotype extraction and formatting for specific variants of interest maintains the mapping between position and sample-wise genotypes
+        - Comparing manually-determined solution to function output for a simple example
     """
     if 'callset' in locals():
         provided_maf = callset['variants/AF']
-        p = [provided_maf[callset_position_indices[i]][0] for i in all_data['POS']]
+        pos_indices = [np.where(callset['variants/POS']==x)[0][0] for x in all_data['POS']]
+        p = provided_maf[pos_indices]
         assert_that(np.allclose(np.array(p),np.array(MAFs['MAF']), atol = 4e-04)).is_true()
 
     l = [[[0,1], [1,1], [0,0]], [[0,0], [0,0], [1,1]]]
@@ -70,6 +77,7 @@ def test_compute_MAFs():
 def test_extract_callset_data():
     """
     Testing function that extracts specified entries from callset dictionary and returns them as dataframe
+        - Making a direct comparison between the extracted dataframe columns and the callset elements
     """
     if 'callset' in locals():
         temp = extract_callset_data(['variants/POS', 'variants/ALT'], callset)
@@ -80,6 +88,7 @@ def test_extract_callset_data():
 def test_format_genotype_data():
     """
     Testing function that returns genotype data from callset
+        - For a randomly sampled variant, checking that the genotype for that variant is the same in the callset as in the formatted genotype tabel (output of the format_genotype_data function)
     """
     if 'callset' in locals():
         geno_formatted = pd.DataFrame(format_genotype_data(callset, callset_position_indices, all_data))
@@ -93,6 +102,9 @@ def test_format_genotype_data():
 def test_return_all_variants_table():
     """
     Testing function that returns variant annotation and genotype data for gene of interest
+        - For a randomly selected sample, convert the genotype from strings to nested list and extract the genotype for that sample from the callset
+            - Compare genotypes
+            - Compare REF and ALT alleles extracted from callset and merged from annotations to test that merging on positions correctly merges the same variants
     """
     if 'callset' in locals():
         temp = return_all_variants_table(path2, path4, path3, postion_dict, gene, annotation_names, callset_names, callset)
