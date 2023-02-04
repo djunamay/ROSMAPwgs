@@ -161,6 +161,7 @@ def return_all_variants_table(path_to_vcf, path_to_annotations, path_to_tbi, pos
     convert_to_int(annotation)
     all_data = pd.merge(df, annotation, on = 'POS')
     all_data = all_data.loc[all_data['FILTER_PASS']]
+    all_data.index = range(all_data.shape[0])
     
     callset_position_indices = return_variant_indices_from_vcf(pos = callset['variants/POS'])
     
