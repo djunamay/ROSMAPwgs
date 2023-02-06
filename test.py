@@ -126,3 +126,8 @@ def test_return_all_variants_table():
         assert_that(np.array_equal(temp['REF_x'], temp['REF_y'])).is_true()
         assert_that(np.array_equal(temp['ALT_0'], temp['ALT'])).is_true()
     
+def test_concatenation():
+    if 'callset' in locals():
+        assert_that(all_variants.shape[0]==genotype_data.shape[0]).is_true()
+        x = return_genotype_counts(all_variants[genotype_data.columns]).iloc[:,1]
+        assert_that(np.array_equal(all_variants['N 0/1'], x)).is_true()

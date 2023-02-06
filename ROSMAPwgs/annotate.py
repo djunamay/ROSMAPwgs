@@ -223,6 +223,7 @@ def load_test_data(path1, path2, path3, path4, callset_names, annotation_names, 
     convert_to_int(annotation)
     all_data = pd.merge(df, annotation, on = 'POS')
     all_data = all_data.loc[all_data['FILTER_PASS']]
+    all_data.index = range(all_data.shape[0])
     # extracting genotype data for variants of interest
     callset_position_indices = return_variant_indices_from_vcf(pos = callset['variants/POS'])
     genotype_data = format_genotype_data(callset, callset_position_indices, all_data)
