@@ -51,8 +51,8 @@ def save_files(syn, outdir, filenames_to_download):
     '''
     downloads files from synapse to target directory
     Args:
-        syn str
-            synapse ID pointing to WGS data
+        syn synapseclient.client.Synapse object
+            synapseclient.Synapse() 
         outdir str
             where to save the downloaded data to
         filenames_to_download ndarray
